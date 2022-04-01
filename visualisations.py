@@ -8,6 +8,7 @@ file = open("dump_darwin_values.txt", "r", encoding="utf-8")
 mentions = []
 values = {}
 i = 0
+
 for line in file:
     if i < 4000:
         line = line.strip('\n')
