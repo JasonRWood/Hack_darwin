@@ -26,10 +26,10 @@ plt.show()
 
 fig, ax = plt.subplots()
 
-ax.barh(list(top.keys()), list(top.values()))
+ax.barh(list(top.keys()), list(top.values()), color="#44AA99")
 ax.invert_yaxis()
 ax.set_xlabel('Number of mentions')
-ax.set_xticks(np.arange(0, max(list(top.values())) + 1, 1000))
+ax.set_xticks(np.arange(0, max(list(top.values())) + 1, 50))
 
 plt.show()
 
@@ -40,12 +40,34 @@ women_count = 0
 male_count = 0
 total_count = 0
 
+occupations = {}
+
 for item in json_array:
+    occ = item["occupation"]
+    if occ != "no common occupation":
+        if not occ in occupations:
+            occupations[occ] = 1
+        else:
+            occupations[occ] += 1
     if item["sex"] == "F":
         women_count +=1
     if item["sex"] == "M":
         male_count +=1
     total_count +=1
+
+occupations = dict(sorted(occupations.items(), key=lambda item: item[1], reverse=True))
+top = dict((i, occupations[i]) for cur, i in enumerate(occupations.keys()) if cur < 11)
+
+fig, ax2 = plt.subplots()
+
+print(top)
+
+ax2.barh(list(top.keys()), list(top.values()),color="#44AA99")
+ax2.invert_yaxis()
+ax2.set_xlabel('Number of people written to with given occupation')
+ax2.set_xticks(np.arange(0, max(list(top.values())) + 1, 50))
+
+plt.show()
 
 size_of_groups=[male_count, women_count, total_count-(women_count+male_count)]
 size_of_groups2=size_of_groups[:-1]
